@@ -48,7 +48,7 @@ total_possibilities = "#{strip1['total'].split('/')[1]} * #{strip2['total'].spli
 #puts "\nTotal possibilities are #{total_possibilities}"
 
 payline_probabilities = {}
-paylines.each { |p| payline_probabilities[p[0]] = "#{strip1[p[0][0]]}*#{strip2[p[0][1]]}*#{strip3[p[0][2]]}" }
+paylines.each { |p| payline_probabilities[p[0]] = "#{strip1[p[0][0]]} * #{strip2[p[0][1]]} * #{strip3[p[0][2]]}" }
 
 #puts "Payline_probabilities: #{payline_probabilities}"
 
@@ -72,7 +72,7 @@ payback_percent = payout*100/payin
 puts "\nPayed out: #{payout}"
 puts "Payed in:  #{payin}"
 puts "Payback % = #{'%.6f' %  payback_percent} % \n"
-puts debug
+puts "Occurance payloads: #{debug}"
 
 puts "\nSimulations scores:"
 payout = 0
@@ -91,4 +91,4 @@ payback_percent_real = payout*100/payin
 puts "\nPayed out: #{payout}"
 puts "Payed in:  #{payin}"
 puts "\nPayback % = #{'%.6f' %  payback_percent_real} % \n"
-puts debug
+puts "Occurance payloads: #{debug}"
