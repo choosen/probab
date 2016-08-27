@@ -1,3 +1,5 @@
+#require 'pry'
+
 def statsFromString(str)
   #puts "\nStart array: #{str}\n\n"
   a = str.split.sort
@@ -16,6 +18,17 @@ class Array
   end
 end
 
+def getPaylines(str)
+  payline_strings = str.split(/\n\r?/)
+  #puts payline_strings
+  paylines = {}
+  payline_strings.each do |p|
+    div = p.split
+    paylines[div[0]] = div[2].to_i
+  end
+  paylines
+end
+
 payline_data = "AAA ——> 100
 BBB ——> 80
 CCC ——> 60
@@ -23,13 +36,8 @@ DDD ——> 40
 EEE ——> 20
 ABC ——> 10
 EDC ——> 5"
-payline_strings = payline_data.split(/\n\r?/)
-#puts payline_strings
-paylines = {}
-payline_strings.each do |p|
-  div = p.split
-  paylines[div[0]] = div[2].to_i
-end
+
+paylines = getPaylines(payline_data)
 #puts "Paylines: #{paylines}\n"
 
 s1 = 'A B C B D E A A B D E C B D A B D E'
@@ -37,8 +45,8 @@ s2 = 'E D E B C A B E D A B C D E A A B B B D D D C E D A D'
 s3 = 'B B D E A E D A C B E A B D E A C D'
 
 a1 = s1.split
-a2 = s1.split
-a3 = s1.split
+a2 = s2.split
+a3 = s3.split
 
 strip1 = statsFromString(s1)
 strip2 = statsFromString(s2)
@@ -80,7 +88,6 @@ debug = {}
 paylines.each { |key,value| debug[key] = 0 }
 
 payin.to_i.times do
-  #payout += paylines[a1.shuffle[0] + a2.shuffle[0] + a3.shuffle[0]] || 0
   turn = a1.random_element + a2.random_element + a3.random_element
   val = paylines[turn]
   payout += val || 0
