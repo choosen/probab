@@ -10,6 +10,10 @@ class DataHash < Hash
   end
 end
 
+class DataStats < Array
+
+end
+
 # Convert data from string form
 def stats_and_paylines_from_str(str)
   data = {}
@@ -43,6 +47,9 @@ def print_scores(payout, payin, debug)
   puts "Occurance payloads: #{debug}"
 end
 
+ROUNDS_IN_GAME_CONST = 2_000.0
+SIMULATIONS_NUMBER_CONST = 1_000
+
 payline_data = "0 - 15% - 3 credits payout
 1 - 65% - 0 credits
 2 - 7% - 2 credits
@@ -57,22 +64,24 @@ payline_data = "0 - 15% - 3 credits payout
 paylines = stats_and_paylines_from_str(payline_data)
 puts "Paylines: #{paylines}\n"
 
-payin = 2_000.0
 payout = 0.0
 debug = {}
 
-paylines.each do |face, bonus|
-  debug[face] = bonus[:probability] * payin.to_i
-  payout += bonus[:probability] * bonus[:credits] * payin
+paylines.each do |face, data|
+  debug[face] = data[:probability] * ROUNDS_IN_GAME_CONST.to_i
+  payout += data[:probability] * data[:credits] * ROUNDS_IN_GAME_CONST
 end
 
-print_scores(payout, payin, debug)
+print_scores(payout, ROUNDS_IN_GAME_CONST, debug)
 
-simulation_payloads = []
-1_000.times do
-  simulation_payloads << simulate(payin, paylines)
+simulation_payloads = DataStats.new
+SIMULATIONS_NUMBER_CONST.times do
+  simulation_payloads << simulate(ROUNDS_IN_GAME_CONST, paylines)
 end
 
 puts "\nSimulations scores:"
-puts simulation_payloads
+IO.popen("less", "w") { |f| f.puts simulation_payloads }
+# puts simulation_payloads
 # TODO: calculate left and right borders of payload %
+
+# border t-student value of 1_000 samples and 90% confidence level: 1,6449
