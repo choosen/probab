@@ -10,11 +10,28 @@ class DataHash < Hash
   end
 end
 
+# add statistic methods to stats array
 class DataStats < Array
+  def sum
+    inject(0) { |accum, i| accum + i }
+  end
 
+  def mean
+    sum / length.to_f
+  end
+
+  def sample_variance
+    m = mean
+    sum = inject(0) { |accum, i| accum + (i - m)**2 }
+    sum / (length - 1).to_f
+  end
+
+  def standard_deviation
+    Math.sqrt(sample_variance)
+  end
 end
 
-# Convert data from string form
+# convert data from string form
 def stats_and_paylines_from_str(str)
   data = {}
   total_probab = 0
@@ -75,13 +92,16 @@ end
 print_scores(payout, ROUNDS_IN_GAME_CONST, debug)
 
 simulation_payloads = DataStats.new(SIMULATIONS_NUMBER_CONST)
-simulation_payloads.each_with_index do |_,index|
+simulation_payloads.each_with_index do |_, index|
   simulation_payloads[index] = simulate(ROUNDS_IN_GAME_CONST, paylines)
 end
 
 puts "\nSimulations scores"
-IO.popen("less", "w") { |f| f.puts simulation_payloads }
-puts "was shown"
+IO.popen('less', 'w') { |f| f.puts simulation_payloads }
+puts 'was shown'
 # TODO: calculate left and right borders of payload %
+
+puts "Mean: #{simulation_payloads.mean}"
+puts "Standard deviation: #{simulation_payloads.standard_deviation}"
 
 # border t-student value of 1_000 samples and 90% confidence level: 1,6449
