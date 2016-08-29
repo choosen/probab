@@ -66,6 +66,8 @@ end
 
 ROUNDS_IN_GAME_CONST = 2_000.0
 SIMULATIONS_NUMBER_CONST = 1_000
+# border t-student value of 1_000 samples and 90% confidence level: 1,6449
+TSTUDENT_VALUE_CONST = 1.644_9
 
 payline_data = "0 - 15% - 3 credits payout
 1 - 65% - 0 credits
@@ -96,12 +98,18 @@ simulation_payloads.each_with_index do |_, index|
   simulation_payloads[index] = simulate(ROUNDS_IN_GAME_CONST, paylines)
 end
 
-puts "\nSimulations scores"
+puts "\nSimulations scores (less format)"
 IO.popen('less', 'w') { |f| f.puts simulation_payloads }
 puts 'was shown'
-# TODO: calculate left and right borders of payload %
 
 puts "Mean: #{simulation_payloads.mean}"
 puts "Standard deviation: #{simulation_payloads.standard_deviation}"
 
-# border t-student value of 1_000 samples and 90% confidence level: 1,6449
+result_max = simulation_payloads.mean +
+             (simulation_payloads.standard_deviation * TSTUDENT_VALUE_CONST) /
+             Math.sqrt(SIMULATIONS_NUMBER_CONST.to_f)
+result_min = simulation_payloads.mean -
+             (simulation_payloads.standard_deviation * TSTUDENT_VALUE_CONST) /
+             Math.sqrt(SIMULATIONS_NUMBER_CONST.to_f)
+
+puts "\nPayload range: #{result_min} .. #{result_max}"
