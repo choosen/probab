@@ -75,7 +75,7 @@ end
 print_scores(payout, ROUNDS_IN_GAME_CONST, debug)
 
 simulation_payloads = DataStats.new(SIMULATIONS_NUMBER_CONST)
-(0..simulation_payloads.length-1).each do |index|
+simulation_payloads.each_with_index do |_,index|
   simulation_payloads[index] = simulate(ROUNDS_IN_GAME_CONST, paylines)
 end
 
