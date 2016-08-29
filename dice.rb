@@ -74,14 +74,14 @@ end
 
 print_scores(payout, ROUNDS_IN_GAME_CONST, debug)
 
-simulation_payloads = DataStats.new
-SIMULATIONS_NUMBER_CONST.times do
-  simulation_payloads << simulate(ROUNDS_IN_GAME_CONST, paylines)
+simulation_payloads = DataStats.new(SIMULATIONS_NUMBER_CONST)
+(0..simulation_payloads.length-1).each do |index|
+  simulation_payloads[index] = simulate(ROUNDS_IN_GAME_CONST, paylines)
 end
 
-puts "\nSimulations scores:"
+puts "\nSimulations scores"
 IO.popen("less", "w") { |f| f.puts simulation_payloads }
-# puts simulation_payloads
+puts "was shown"
 # TODO: calculate left and right borders of payload %
 
 # border t-student value of 1_000 samples and 90% confidence level: 1,6449
