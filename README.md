@@ -1,4 +1,4 @@
-#SlotMachine
+#SlotMachine and Dice game
 
 ### :hash: App description
 -------------
