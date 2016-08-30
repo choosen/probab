@@ -99,9 +99,8 @@ debug = {}
 
 payin.to_i.times do
   turn = a1.random_element + a2.random_element + a3.random_element
-  val = paylines[turn]
-  payout += val || 0
-  debug[turn] = (debug[turn] || 0) + 1 if !val.nil? && val > 0
+  payout += paylines[turn].to_i
+  debug[turn] = debug[turn].to_i + 1 unless paylines[turn].nil?
 end
 
 print_scores(payout, payin, debug)
