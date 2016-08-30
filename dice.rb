@@ -2,11 +2,11 @@ require 'pry'
 
 # add a constructor shortcut to hash containing initial data
 class DataHash < Hash
-  def self.constr(probability, credits, total_probab)
+  def initialize(probability = '0.0', credits = '0', total_probab = 0)
     end_of_range = total_probab + (probability.to_f * 10).to_i - 1
-    Hash[probability: probability.to_f / 100,
-         credits: credits.to_f,
-         random_range: total_probab..end_of_range]
+    self[:probability] = probability.to_f / 100
+    self[:credits] = credits.to_f
+    self[:random_range] = total_probab..end_of_range
   end
 end
 
@@ -37,7 +37,7 @@ def stats_and_paylines_from_str(str)
   total_probab = 0
   str.split(/\n\r?/).each do |text|
     slices = text.split(/(% \-| - | )+/)
-    data[slices[0].to_i] = DataHash.constr(slices[2], slices[4], total_probab)
+    data[slices[0].to_i] = DataHash.new(slices[2], slices[4], total_probab)
     total_probab += (slices[2].to_f * 10).to_i
   end
   data
@@ -51,7 +51,7 @@ def simulate(payin, paylines)
     face = faces.keys.first
     payout += paylines[face][:credits] # || 0 # if !paylines[face].nil?
   end
-  payback_percent = payout * 100 / payin
+  payout * 100 / payin
 end
 
 # print scores of calculation and Simulations, returns payback_percent
