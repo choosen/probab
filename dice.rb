@@ -1,4 +1,4 @@
-require 'pry'
+# require 'pry'
 
 # add a constructor shortcut to hash containing initial data
 class DataHash < Hash
