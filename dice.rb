@@ -47,8 +47,7 @@ def simulate(payin, paylines)
   payout = 0.0
   payin.to_i.times do
     random_n = rand(1000)
-    faces = paylines.select { |_, pl| pl[:random_range].include?(random_n) }
-    face = faces.keys.first
+    face = paylines.find { |_, pl| pl[:random_range].include?(random_n) }[0]
     payout += paylines[face][:credits] # || 0 # if !paylines[face].nil?
   end
   payout * 100 / payin
@@ -98,9 +97,9 @@ simulation_payloads.each_with_index do |_, index|
   simulation_payloads[index] = simulate(ROUNDS_IN_GAME_CONST, paylines)
 end
 
-puts "\nSimulations scores (less format)"
-IO.popen('less', 'w') { |f| f.puts simulation_payloads }
-puts 'was shown'
+puts "\nSimulations scores" # (less format)"
+# IO.popen('less', 'w') { |f| f.puts simulation_payloads }
+# puts 'was shown'
 
 puts "Mean: #{simulation_payloads.mean}"
 puts "Standard deviation: #{simulation_payloads.standard_deviation}"
