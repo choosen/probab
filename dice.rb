@@ -45,7 +45,7 @@ end
 
 def simulate(payin, paylines)
   payout = 0.0
-  payin.to_i.times do
+  1.upto(payin.to_i).each do
     random_n = rand(1000)
     face = paylines.find { |_, pl| pl[:random_range].include?(random_n) }[0]
     payout += paylines[face][:credits] # || 0 # if !paylines[face].nil?

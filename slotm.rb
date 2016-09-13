@@ -97,41 +97,14 @@ puts "\nSimulations scores:"
 payout = 0
 debug = {}
 
-require 'benchmark'
+# require 'benchmark'
 
-c = Benchmark.measure do
-  payin.to_i.times do
-    turn = a1.random_element + a2.random_element + a3.random_element
-    payout += paylines[turn].to_i
-    debug[turn] = debug[turn].to_i + 1 unless paylines[turn].nil?
-  end
+# u = Benchmark.measure do
+1.upto(payin.to_i) do
+  turn = a1.random_element + a2.random_element + a3.random_element
+  payout += paylines[turn].to_i
+  debug[turn] = debug[turn].to_i + 1 unless paylines[turn].nil?
 end
-
-r = Benchmark.measure do
-  for i in 1..(payin.to_i) do
-    turn = a1.random_element + a2.random_element + a3.random_element
-    payout += paylines[turn].to_i
-    debug[turn] = debug[turn].to_i + 1 unless paylines[turn].nil?
-  end
-end
-
-u = Benchmark.measure do
-  1.upto(payin.to_i) do
-    turn = a1.random_element + a2.random_element + a3.random_element
-    payout += paylines[turn].to_i
-    debug[turn] = debug[turn].to_i + 1 unless paylines[turn].nil?
-  end
-end
-
-e = Benchmark.measure do
-  (1..(payin.to_i)).each do
-    turn = a1.random_element + a2.random_element + a3.random_element
-    payout += paylines[turn].to_i
-    debug[turn] = debug[turn].to_i + 1 unless paylines[turn].nil?
-  end
-end
-
-
-puts "C= #{c} | R = #{r} | U = #{u} | E = #{e}"
+# end
 
 print_scores(payout, payin, debug)
