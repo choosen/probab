@@ -82,7 +82,7 @@ payline_probab.each { |key, val| payline_probab[key] = eval(val) }
 
 puts "payline_probab: #{payline_probab}"
 
-payin = 1_000_000.0
+payin = 1_000_000_0.0
 payout = 0
 debug = {}
 # puts "\nThearetical payout for each combination for #{payin} credits"
@@ -97,10 +97,41 @@ puts "\nSimulations scores:"
 payout = 0
 debug = {}
 
-payin.to_i.times do
-  turn = a1.random_element + a2.random_element + a3.random_element
-  payout += paylines[turn].to_i
-  debug[turn] = debug[turn].to_i + 1 unless paylines[turn].nil?
+require 'benchmark'
+
+c = Benchmark.measure do
+  payin.to_i.times do
+    turn = a1.random_element + a2.random_element + a3.random_element
+    payout += paylines[turn].to_i
+    debug[turn] = debug[turn].to_i + 1 unless paylines[turn].nil?
+  end
 end
+
+r = Benchmark.measure do
+  for i in 1..(payin.to_i) do
+    turn = a1.random_element + a2.random_element + a3.random_element
+    payout += paylines[turn].to_i
+    debug[turn] = debug[turn].to_i + 1 unless paylines[turn].nil?
+  end
+end
+
+u = Benchmark.measure do
+  1.upto(payin.to_i) do
+    turn = a1.random_element + a2.random_element + a3.random_element
+    payout += paylines[turn].to_i
+    debug[turn] = debug[turn].to_i + 1 unless paylines[turn].nil?
+  end
+end
+
+e = Benchmark.measure do
+  (1..(payin.to_i)).each do
+    turn = a1.random_element + a2.random_element + a3.random_element
+    payout += paylines[turn].to_i
+    debug[turn] = debug[turn].to_i + 1 unless paylines[turn].nil?
+  end
+end
+
+
+puts "C= #{c} | R = #{r} | U = #{u} | E = #{e}"
 
 print_scores(payout, payin, debug)
